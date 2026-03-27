@@ -1,17 +1,14 @@
 import HeroSection from "@/components/modules/home/hero";
+import { getAllEvents } from "@/services/events";
+ 
 
 export default async function Home() {
-//   const { data } = await getAllService();
+  const result = await getAllEvents({ limit: 1 });
+  const event = result?.data?.[0];
 
   return (
     <div>
-      <HeroSection/>
-      {/* <HeroCarousel />
-      <div className="grid grid-cols-4 gap-5">
-        {data?.slice(0, 4).map((s: any) => (
-          <ServiceCard key={s.id} service={s} />
-        ))}
-      </div> */}
+      <HeroSection event={event} />
     </div>
   );
 }

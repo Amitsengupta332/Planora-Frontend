@@ -1,16 +1,46 @@
-"use client";
-
 import Link from "next/link";
 import { CalendarDays, MapPin, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export default function HeroSection() {
+type HeroEvent = {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  venue: string;
+  feeType: "FREE" | "PAID";
+  fee?: number;
+  creator?: {
+    name: string;
+  };
+};
+
+interface HeroSectionProps {
+  event?: HeroEvent;
+}
+
+function formatEventDate(dateString?: string) {
+  if (!dateString) return "Date not available";
+
+  const date = new Date(dateString);
+
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "UTC",
+  }).format(date);
+}
+
+export default function HeroSection({ event }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-background to-muted/40">
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="grid items-center gap-10 lg:grid-cols-2">
-          {/* Left Content */}
           <div className="space-y-6">
             <Badge className="rounded-full px-4 py-1 text-sm">
               Discover • Create • Join Events
@@ -37,7 +67,11 @@ export default function HeroSection() {
               </Link>
 
               <Link href="/dashboard/my-events">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
                   Create Event
                 </Button>
               </Link>
@@ -55,13 +89,12 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right Content - Featured Event Card */}
           <div className="relative">
             <div className="rounded-3xl border bg-background p-6 shadow-xl">
               <div className="mb-4 flex items-center justify-between">
                 <Badge variant="secondary">Featured Event</Badge>
                 <Badge className="bg-green-600 text-white hover:bg-green-600">
-                  Free
+                  {event?.feeType === "PAID" ? `Paid ৳${event.fee}` : "Free"}
                 </Badge>
               </div>
 
@@ -75,37 +108,40 @@ export default function HeroSection() {
                 </div>
 
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold">Tech Innovators Meetup 2026</h2>
+                  <h2 className="text-2xl font-bold">
+                    {event?.title || "No featured event available"}
+                  </h2>
                   <p className="text-sm text-muted-foreground">
-                    Connect with developers, founders, and creators for a day of
-                    networking, collaboration, and inspiring talks.
+                    {event?.description ||
+                      "Please check back later for upcoming featured events."}
                   </p>
                 </div>
 
                 <div className="space-y-3 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <CalendarDays className="h-4 w-4 text-primary" />
-                    <span>April 20, 2026 • 6:00 PM</span>
+                    <span>{formatEventDate(event?.date)}</span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-primary" />
-                    <span>Dhaka Convention Center</span>
+                    <span>{event?.venue || "Venue not available"}</span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <Users className="h-4 w-4 text-primary" />
-                    <span>Hosted by Planora Community</span>
+                    <span>
+                      Hosted by {event?.creator?.name || "Unknown organizer"}
+                    </span>
                   </div>
                 </div>
 
-                <Link href="/events/featured-event-id">
+                <Link href={event ? `/events/${event.id}` : "/events"}>
                   <Button className="mt-2 w-full">Join Now</Button>
                 </Link>
               </div>
             </div>
 
-            {/* Decorative blur */}
             <div className="absolute -right-10 -top-10 -z-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />
             <div className="absolute -bottom-10 -left-10 -z-10 h-40 w-40 rounded-full bg-purple-500/20 blur-3xl" />
           </div>
