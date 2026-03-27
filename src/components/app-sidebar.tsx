@@ -4,11 +4,8 @@ import * as React from "react";
 import {
   CalendarDays,
   LayoutDashboard,
-  MessageSquare,
-  Settings,
   ShieldCheck,
   Ticket,
-  UserCog,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
