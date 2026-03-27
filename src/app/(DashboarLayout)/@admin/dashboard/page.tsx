@@ -1,7 +1,7 @@
 
 
 function AdminDashboardLayout() {
-  return <div>AdminDashboardLayout</div>;
+  return <div>AdminDashboardLayout...</div>;
 }
 
 export default AdminDashboardLayout;
