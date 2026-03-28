@@ -29,6 +29,10 @@ import {
 //         url: "/dashboard/manage-users",
 //       },
 //       {
+//         title: "Create Event",
+//         url: "/dashboard/create-event",
+//       },
+//       {
 //         title: "Manage Events",
 //         url: "/dashboard/manage-events",
 //       },
@@ -43,13 +47,35 @@ import {
 //     ],
 //   },
 // ];
+
+const COMMON_EVENT_ITEMS = [
+  {
+    title: "Create Event",
+    url: "/dashboard/create-event",
+  },
+  {
+    title: "My Events",
+    url: "/dashboard/my-events",
+  },
+  {
+    title: "Joined Events",
+    url: "/dashboard/joined-events",
+  },
+];
+
+// const COMMON_EVENT_ITEMS = [
+//   {
+//     title: "Create Event",
+//     url: "/dashboard/create-event",
+//   },
+// ];
 const ADMIN_navMain = [
   {
     title: "Admin Dashboard",
     url: "/dashboard",
     icon: ShieldCheck,
-    isActive: true,
     items: [
+      ...COMMON_EVENT_ITEMS,
       {
         title: "Manage Users",
         url: "/dashboard/manage-users",
@@ -69,19 +95,62 @@ const ADMIN_navMain = [
     ],
   },
 ];
-const USER_navMain = [
+
+// const USER_navMain = [
+//   {
+//     title: "User Dashboard",
+//     url: "/dashboard",
+//     icon: LayoutDashboard,
+//     isActive: true,
+//     items: [
+//       {
+//         title: "My Events",
+//         url: "/dashboard/my-events",
+//       },
+//       {
+//         title: "Create Event",
+//         url: "/dashboard/create-event",
+//       },
+//       {
+//         title: "Invitations",
+//         url: "/dashboard/invitations",
+//       },
+//       {
+//         title: "My Reviews",
+//         url: "/dashboard/reviews",
+//       },
+//       {
+//         title: "Settings",
+//         url: "/dashboard/settings",
+//       },
+//     ],
+//   },
+//   {
+//     title: "Event Tools",
+//     url: "#",
+//     icon: CalendarDays,
+//     items: [
+//       {
+//         title: "Browse Events",
+//         url: "/events",
+//       },
+//       {
+//         title: "Joined Events",
+//         url: "/dashboard/joined-events",
+//       },
+//     ],
+//   },
+// ];
+
+const  USER_navMain = [
   {
     title: "User Dashboard",
     url: "/dashboard",
     icon: LayoutDashboard,
-    isActive: true,
     items: [
+      ...COMMON_EVENT_ITEMS,
       {
-        title: "My Events",
-        url: "/dashboard/my-events",
-      },
-      {
-        title: "Invitations",
+        title: "Pending Invitations",
         url: "/dashboard/invitations",
       },
       {
@@ -103,14 +172,9 @@ const USER_navMain = [
         title: "Browse Events",
         url: "/events",
       },
-      {
-        title: "Joined Events",
-        url: "/dashboard/joined-events",
-      },
     ],
   },
 ];
-
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   userRole?: "ADMIN" | "USER";
 }
