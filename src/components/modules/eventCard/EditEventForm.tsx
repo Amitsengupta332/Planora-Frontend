@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getEventById, TEventPayload, updateEvent } from "@/services/events";
- 
+import { toast } from "sonner";
 
 const editEventSchema = z
   .object({
@@ -36,7 +36,8 @@ const editEventSchema = z
     }
   });
 
-type TEditEventFormValues = z.infer<typeof editEventSchema>;
+type TEditEventFormInput = z.input<typeof editEventSchema>;
+type TEditEventFormValues = z.output<typeof editEventSchema>;
 
 type TEvent = {
   id: string;
@@ -56,12 +57,19 @@ type EditEventFormProps = {
   eventId: string;
 };
 
+const defaultValues: TEditEventFormInput = {
+  title: "",
+  description: "",
+  date: "",
+  venue: "",
+  eventType: "PUBLIC",
+  feeType: "FREE",
+  fee: 0,
+};
+
 export default function EditEventForm({ eventId }: EditEventFormProps) {
   const router = useRouter();
-
   const [loading, setLoading] = useState(true);
-  const [submitError, setSubmitError] = useState("");
-  const [submitSuccess, setSubmitSuccess] = useState("");
 
   const {
     register,
@@ -69,17 +77,9 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
     watch,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<TEditEventFormValues>({
+  } = useForm<TEditEventFormInput, unknown, TEditEventFormValues>({
     resolver: zodResolver(editEventSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      date: "",
-      venue: "",
-      eventType: "PUBLIC",
-      feeType: "FREE",
-      fee: 0,
-    },
+    defaultValues,
   });
 
   const feeType = watch("feeType");
@@ -88,7 +88,6 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
     const loadEvent = async () => {
       try {
         setLoading(true);
-        setSubmitError("");
 
         const result = await getEventById(eventId);
 
@@ -110,7 +109,10 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Something went wrong";
-        setSubmitError(message);
+
+        toast.error("Failed to load event", {
+          description: message,
+        });
       } finally {
         setLoading(false);
       }
@@ -121,11 +123,8 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
     }
   }, [eventId, reset]);
 
-  const onSubmit = async (values: TEditEventFormValues) => {
+  const onSubmit: SubmitHandler<TEditEventFormValues> = async (values) => {
     try {
-      setSubmitError("");
-      setSubmitSuccess("");
-
       const payload: Partial<TEventPayload> = {
         title: values.title,
         description: values.description,
@@ -142,16 +141,19 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
         throw new Error(result?.message || "Failed to update event");
       }
 
-      setSubmitSuccess("Event updated successfully");
+      toast.success("Event updated successfully", {
+        description: "Your event has been updated.",
+      });
 
-      setTimeout(() => {
-        router.push("/dashboard/my-events");
-        router.refresh();
-      }, 800);
+      router.push("/dashboard/my-events");
+      router.refresh();
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Something went wrong";
-      setSubmitError(message);
+
+      toast.error("Update failed", {
+        description: message,
+      });
     }
   };
 
@@ -171,18 +173,6 @@ export default function EditEventForm({ eventId }: EditEventFormProps) {
           Update your event information.
         </p>
       </div>
-
-      {submitError && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-          {submitError}
-        </div>
-      )}
-
-      {submitSuccess && (
-        <div className="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
-          {submitSuccess}
-        </div>
-      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
