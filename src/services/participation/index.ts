@@ -28,13 +28,29 @@ export type TParticipation = {
     email: string;
     role?: "ADMIN" | "USER";
   };
+  // event?: {
+  //   id: string;
+  //   title: string;
+  //   eventType?: "PUBLIC" | "PRIVATE";
+  //   feeType?: "FREE" | "PAID";
+  //   fee?: number;
+  //   creatorId?: string;
+  // };
   event?: {
     id: string;
     title: string;
+    description?: string;
+    date?: string;
+    venue?: string;
     eventType?: "PUBLIC" | "PRIVATE";
     feeType?: "FREE" | "PAID";
     fee?: number;
     creatorId?: string;
+    creator?: {
+      id: string;
+      name: string;
+      email: string;
+    };
   };
   payment?: TPayment | null;
 };
@@ -105,7 +121,7 @@ export const approveParticipation = async (participationId: string) => {
         ...getAuthHeaders(),
       },
       cache: "no-store",
-    }
+    },
   );
 
   return res.json() as Promise<TParticipationSingleResponse>;
@@ -120,7 +136,7 @@ export const rejectParticipation = async (participationId: string) => {
         ...getAuthHeaders(),
       },
       cache: "no-store",
-    }
+    },
   );
 
   return res.json() as Promise<TParticipationSingleResponse>;
