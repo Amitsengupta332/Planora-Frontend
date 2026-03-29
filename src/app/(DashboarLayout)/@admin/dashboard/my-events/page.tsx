@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
- 
+
 import { getCurrentUserClient } from "@/services/auth";
 import { deleteEvent, getAllEvents } from "@/services/events";
 
@@ -65,7 +65,7 @@ export default function MyEventsPage() {
 
   const handleDelete = async (eventId: string) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this event?"
+      "Are you sure you want to delete this event?",
     );
 
     if (!confirmDelete) return;
@@ -102,8 +102,7 @@ export default function MyEventsPage() {
 
         <Link
           href="/dashboard/create-event"
-          className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white"
-        >
+          className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white">
           Create Event
         </Link>
       </div>
@@ -126,8 +125,7 @@ export default function MyEventsPage() {
           </p>
           <Link
             href="/dashboard/create-event"
-            className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white"
-          >
+            className="mt-4 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white">
             Create Your First Event
           </Link>
         </div>
@@ -136,8 +134,7 @@ export default function MyEventsPage() {
           {events.map((event) => (
             <div
               key={event.id}
-              className="rounded-2xl border bg-white p-5 shadow-sm"
-            >
+              className="rounded-2xl border bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-start justify-between gap-3">
                 <div>
                   <h2 className="line-clamp-1 text-lg font-semibold">
@@ -175,24 +172,26 @@ export default function MyEventsPage() {
 
               <div className="mt-5 flex flex-wrap gap-2">
                 <Link
+                  href={`/dashboard/my-events/${event.id}/participants`}
+                  className="inline-flex rounded-md border px-3 py-2 text-sm font-medium">
+                  Manage Participants
+                </Link>
+                <Link
                   href={`/events/${event.id}`}
-                  className="rounded-lg border px-3 py-2 text-sm font-medium"
-                >
+                  className="rounded-lg border px-3 py-2 text-sm font-medium">
                   View
                 </Link>
 
                 <Link
                   href={`/dashboard/my-events/${event.id}/edit`}
-                  className="rounded-lg border px-3 py-2 text-sm font-medium"
-                >
+                  className="rounded-lg border px-3 py-2 text-sm font-medium">
                   Edit
                 </Link>
 
                 <button
                   onClick={() => handleDelete(event.id)}
                   disabled={deletingId === event.id}
-                  className="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 disabled:opacity-50"
-                >
+                  className="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 disabled:opacity-50">
                   {deletingId === event.id ? "Deleting..." : "Delete"}
                 </button>
               </div>

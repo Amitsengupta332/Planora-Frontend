@@ -304,3 +304,41 @@ export const deleteEvent = async (id: string) => {
 
   return res.json() as Promise<TDeleteEventResponse>;
 };
+
+
+ 
+
+// export type TSingleEventResponse = {
+//   success: boolean;
+//   message: string;
+//   data: {
+//     id: string;
+//     title: string;
+//     creatorId: string;
+//   };
+// };
+
+const getAuthHeaders = () => {
+  const token = getAccessToken();
+
+  return {
+    Authorization: token ? `Bearer ${token}` : "",
+    "Content-Type": "application/json",
+  };
+};
+
+export const getSingleEvent = async (eventId: string) => {
+  const res = await fetch(`${BASE_URL}/events/${eventId}`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data?.message || "Failed to fetch event");
+  }
+
+  return data as TSingleEventResponse;
+};

@@ -38,3 +38,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 
 Auth → User → Event → Participation → (Payment) → Review → Admin
+
+# workflow
+
+Public + Free  -> auto approved
+Public + Paid  -> pay first, then pending, then approve/reject
+Private + Free -> pending, then approve/reject
+Private + Paid -> pay first, then pending, then approve/reject
+
+PENDING → APPROVED
+PENDING → REJECTED
+APPROVED → BANNED
