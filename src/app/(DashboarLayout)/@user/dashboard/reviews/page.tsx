@@ -1,7 +1,7 @@
-import React from 'react'
+import MyReviewsClient from "@/components/reviews/MyReviewsClient";
 
-export default function UserReviewsPage() {
-  return (
-    <div>UserReviewsPage</div>
-  )
+ 
+
+export default function MyReviewsPage() {
+  return <MyReviewsClient />;
 }

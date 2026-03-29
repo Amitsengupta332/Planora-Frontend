@@ -1,9 +1,7 @@
+import MyReviewsClient from "@/components/reviews/MyReviewsClient";
+
  
 
-function AdminReviews() {
-  return (
-    <div>AdminReviews</div>
-  )
+export default function MyReviewsPage() {
+  return <MyReviewsClient />;
 }
-
-export default AdminReviews
