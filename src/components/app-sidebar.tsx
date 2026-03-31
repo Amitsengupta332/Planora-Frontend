@@ -251,7 +251,7 @@ type NavGroup = {
 };
 const COMMON_EVENT_ITEMS: NavGroup["items"] = [
   {
-    title: "home",
+    title: "Home",
     url: "/",
   },
   {

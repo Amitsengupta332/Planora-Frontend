@@ -5,7 +5,7 @@ import { getAllEvents } from "@/services/events";
  
 
 export default async function EventPage() {
-  const result = await getAllEvents();
+  const result = await getAllEvents(); 
   const events = result?.data || [];
 
   return (
